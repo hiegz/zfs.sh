@@ -8,8 +8,7 @@ if [ ! -f "/etc/arch-release" ]; then
     exit 1
 fi
 
+test -d $ZFSDIR/.git || git clone --single-branch --branch $ZFSVERSION --depth 1 https://github.com/openzfs/zfs $ZFSDIR
 cd $ZFSDIR
+git fetch origin $ZFSVERSION
 git reset --hard $ZFSVERSION
-sudo make uninstall
-sudo ldconfig
-sudo depmod

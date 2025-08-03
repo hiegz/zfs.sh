@@ -8,13 +8,14 @@ if [ ! -f "/etc/arch-release" ]; then
     exit 1
 fi
 
-sudo pacman -S --noconfirm --needed \
-    base-devel \
-    python
+if [ ! -d $ZFSDIR/.git ]; then
+    echo "error: unable to find zfs repo clone"
+    echo "hint:  run 'make fetch'"
+    echo "info:  quitting ..."
+    exit 1
+fi
 
-test -d $ZFSDIR/.git || git clone --single-branch --branch $ZFSVERSION --depth 1 https://github.com/openzfs/zfs $ZFSDIR
 cd $ZFSDIR
-git fetch origin $ZFSVERSION
 git reset --hard $ZFSVERSION
 sh autogen.sh
 ./configure
